@@ -1,0 +1,30 @@
+export function requireAuth(to, from, next) {
+  let token =localStorage.getItem('user_token');  //getting token from login page
+  if (token===null) {                             // validation for routing component
+    console.log("token"+token);
+    next({
+      path: '/',
+      query: { redirect: to.fullPath }
+    });
+  } else {
+    next();                                   // for route
+  }
+}
+
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
+    },
+    {
+      path: '/Dashboard/dashboard',
+      name: 'Business',
+       beforeEnter: requireAuth,              // neeed to write authentication
+      component: dashboard
+    },
+  ],
+  mode: 'history',
+})
